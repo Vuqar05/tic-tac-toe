@@ -67,6 +67,14 @@ const game = (function () {
         //diagonals
         if (allEqual([board[0][0], board[1][1], board[2][2]]) && board[1][1] !== filler) return board[1][1]
         if (allEqual([board[0][2], board[1][1], board[2][0]]) && board[1][1] !== filler) return board[1][1]
+        return null
+    }
+    
+    const isDraw = function () {
+        for (let i = 0; i < 3; i++) {
+            if (board[i].includes(filler)) return false
+        }
+        return true
     }
 
     let playTurn = (row, col) => {
@@ -94,7 +102,12 @@ const game = (function () {
             clearBoard()
             drawer.clearGrid()
         }
-        drawGrid()
+        else{
+            if (isDraw()) {
+                clearBoard()
+                drawer.clearGrid()
+            }
+        }
     }
 
     let drawGrid = () => {
