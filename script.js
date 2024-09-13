@@ -46,8 +46,8 @@ const game = (function () {
 
     const playTurn = (row, col) => {
         let cell = board[row][col]
-        if (cell < 0 || cell > 8){
-            console.log("ERROR: Illegal cell number")
+        if (row < 0 || col < 0 || row > 2 || col > 2){
+            console.log("ERROR: Illegal row/col number")
             return
         }
         if (cell !== filler) {
