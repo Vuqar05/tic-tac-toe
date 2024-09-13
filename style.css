@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    font-family: Montserrat, sans-serif;
+    font-weight: 600;
 }
 
 html, body {
@@ -12,6 +14,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 2%;
+}
+
+
+.scores {
+    width: min(70vw, 70vh);
+    max-height: 3ch;
+    overflow: scroll;
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    font-size: 2rem;
+    font-weight: 900;
 }
 
 .board {
@@ -32,9 +49,56 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
+    font-size: 5rem;
 }
 
 .cell:hover {
     filter: brightness(.95);
+}
+
+button {
+    box-sizing: content-box;
+    appearance: none;
+    border: none;
+    padding: .5rem 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    min-width: 12ch;
+    background-color: #e9e9ed;
+    color: black;
+}
+
+button:hover {
+    background-color: #d0d0d7;
+}
+
+input {
+    appearance: none;
+    border: none;
+    background-color: #e9e9ed;
+    border-radius: 5px;
+}
+
+button:active {
+    box-shadow: 5px 5px 12px rgb(0 0 0 / 45%);
+}
+
+input:hover {
+    background-color: #d0d0d7;
+}
+
+input:focus {
+    outline: none;
+    background-color: #d0d0d7;
+    box-shadow: 5px 5px 15px rgb(0 0 0 / 45%);
+}
+
+dialog[open] {
+    border: none;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
