@@ -22,7 +22,11 @@ const game = (function () {
     const allEqual = (arr) => new Set(arr).size === 1;
 
 
-    const clearBoard = () => {board[0] = board[1] = board[2] = [filler, filler, filler]}
+    const clearBoard = function () {
+        for (let i = 0; i < 3; i++) {
+            board[i].fill(filler)
+        }
+    }
 
 
     const changeNames = (player1name, player2name) => {
@@ -30,7 +34,7 @@ const game = (function () {
         player2.name = player2name
     }
 
-    const checkWinnerSign = () => {
+    const checkWinnerSign = function () {
         for (let i = 0; i < 3; i++) {
             // Rows
             if (allEqual(board[i]) && board[i][0] !== filler) return board[i][0];
@@ -44,7 +48,7 @@ const game = (function () {
         if (allEqual([board[0][2], board[1][1], board[2][0]]) && board[1][1] !== filler) return board[1][1]
     }
 
-    const playTurn = (row, col) => {
+    let playTurn = (row, col) => {
         let cell = board[row][col]
         if (row < 0 || col < 0 || row > 2 || col > 2){
             console.log("ERROR: Illegal row/col number")
@@ -59,8 +63,12 @@ const game = (function () {
         player1turn = !player1turn;
 
         let winnerSign = checkWinnerSign()
+        console.log(checkWinnerSign())
         if (winnerSign) {
-            console.log(winnerSign + " won!")
+            let winner = winnerSign === "X" ? player1 : player2
+            winner.addScore()
+            console.log(`${winner.name} won!
+             \nScore: ${player1.name} - ${player1.getScore()} | ${player2.name} - ${player2.getScore()}`)
             clearBoard()
         }
         drawGrid()
@@ -71,6 +79,12 @@ const game = (function () {
             console.log(row.join("|"))})
     }
 
-    return {drawGrid, playTurn, changeNames}
+    return {drawGrid, playTurn, changeNames, checkWinnerSign}
 })()
+
+game.playTurn(0, 0)
+game.playTurn(0, 1)
+game.playTurn(1, 1)
+game.playTurn(1, 2)
+game.playTurn(2, 2)
 
