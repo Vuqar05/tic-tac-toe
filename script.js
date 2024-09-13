@@ -5,6 +5,27 @@ let player = function (name) {
     return {name, getScore, addScore}
 }
 
+const drawer = (function () {
+    const grid = document.querySelectorAll(".cell")
+    grid.forEach(x => x.addEventListener("click", (e) => {
+        let id = e.target.id
+        let row = Math.floor(id / 3)
+        let col = id % 3
+        game.playTurn(row, col)
+    }))
+
+    const fillGrid = function (row, col, symbol) {
+        grid[row*3 + col].innerText = symbol
+    }
+
+    const clearGrid = () => {
+        grid.forEach(e => e.innerText = "")
+    }
+
+    return {fillGrid, clearGrid}
+})()
+
+
 const game = (function () {
     let filler = " "
     let board = [
@@ -60,6 +81,7 @@ const game = (function () {
         }
 
         board[row][col] = player1turn ? "X" : "O"
+        drawer.fillGrid(row, col, player1turn ? "X" : "O")
         player1turn = !player1turn;
 
         let winnerSign = checkWinnerSign()
@@ -70,6 +92,7 @@ const game = (function () {
             console.log(`${winner.name} won!
              \nScore: ${player1.name} - ${player1.getScore()} | ${player2.name} - ${player2.getScore()}`)
             clearBoard()
+            drawer.clearGrid()
         }
         drawGrid()
     }
@@ -78,13 +101,8 @@ const game = (function () {
         board.forEach(row => {
             console.log(row.join("|"))})
     }
-
     return {drawGrid, playTurn, changeNames, checkWinnerSign}
 })()
 
-game.playTurn(0, 0)
-game.playTurn(0, 1)
-game.playTurn(1, 1)
-game.playTurn(1, 2)
-game.playTurn(2, 2)
+
 
