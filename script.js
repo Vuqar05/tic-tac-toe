@@ -19,6 +19,9 @@ const drawer = (function () {
 
     const fillGrid = function (row, col, symbol) {
         grid[row*3 + col].innerText = symbol
+
+        if (symbol === "X") grid[row*3 + col].style.color = "var(--player1-color)"
+        else grid[row*3 + col].style.color = "var(--player2-color)"
     }
 
     const clearGrid = () => {
@@ -28,11 +31,21 @@ const drawer = (function () {
     const drawNamesAnsScores = (player1name, player2name, player1score, player2score) => {
         player1scoreBoard.innerText = `${player1name}: ${player1score}`
         player2scoreBoard.innerText = `${player2name}: ${player2score}`
+    }
 
+    const drawNameColors = (isPlayer1Turn) => {
+        if (isPlayer1Turn) {
+            player1scoreBoard.style.color = "var(--player1-color)"
+            player2scoreBoard.style.color = "black"
+        }
+        else {
+            player2scoreBoard.style.color = "var(--player2-color)"
+            player1scoreBoard.style.color = "black"
+        }
     }
 
 
-    return {fillGrid, clearGrid, drawNamesAnsScores}
+    return {fillGrid, clearGrid, drawNamesAnsScores, drawNameColors}
 })()
 
 
@@ -48,6 +61,7 @@ const game = (function () {
     let player2 = player("Rob")
     let player1turn = true
     drawer.drawNamesAnsScores(player1.name, player2.name, 0, 0)
+    drawer.drawNameColors(player1turn)
 
     const allEqual = (arr) => new Set(arr).size === 1;
 
@@ -90,12 +104,7 @@ const game = (function () {
 
     const playTurn = (row, col) => {
         let cell = board[row][col]
-        if (row < 0 || col < 0 || row > 2 || col > 2){
-            console.log("ERROR: Illegal row/col number")
-            return
-        }
-        if (cell !== filler) {
-            console.log("ERROR: occupied cell")
+        if (row < 0 || col < 0 || row > 2 || col > 2 || cell !== filler) {
             return
         }
 
@@ -103,13 +112,11 @@ const game = (function () {
         drawer.fillGrid(row, col, player1turn ? "X" : "O")
         player1turn = !player1turn;
 
+
         let winnerSign = checkWinnerSign()
-        console.log(checkWinnerSign())
         if (winnerSign) {
             let winner = winnerSign === "X" ? player1 : player2
             winner.addScore()
-            console.log(`${winner.name} won!
-             \nScore: ${player1.name} - ${player1.getScore()} | ${player2.name} - ${player2.getScore()}`)
             clearBoard()
             drawer.drawNamesAnsScores(player1.name, player2.name, player1.getScore(), player2.getScore())
         }
@@ -118,13 +125,11 @@ const game = (function () {
                 clearBoard()
             }
         }
+
+        drawer.drawNameColors(player1turn)
     }
 
-    const drawGrid = () => {
-        board.forEach(row => {
-            console.log(row.join("|"))})
-    }
-    return {drawGrid, playTurn, changeNames, checkWinnerSign, clearBoard}
+    return {playTurn, changeNames, checkWinnerSign, clearBoard}
 })()
 
 
@@ -138,7 +143,6 @@ const manager = (function (){
         let name1 = player1NameField.value
         let name2 = player2NameField.value
         if (name1 && name2) {
-            console.log(1)
             game.changeNames(name1, name2)
             dialog.close()
         }
