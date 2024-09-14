@@ -2,7 +2,8 @@ const player = function (name) {
     let score = 0
     let getScore = () => score
     let addScore = () => score++
-    return {name, getScore, addScore}
+    let clearScore= () => score = 0;
+    return {name, getScore, addScore, clearScore}
 }
 
 const drawer = (function () {
@@ -102,6 +103,12 @@ const game = (function () {
         return true
     }
 
+    const clearScores = () => {
+        player1.clearScore()
+        player2.clearScore()
+        drawer.drawNamesAnsScores(player1.name, player2.name, player1.getScore(), player2.getScore())
+    }
+
     const playTurn = (row, col) => {
         let cell = board[row][col]
         if (row < 0 || col < 0 || row > 2 || col > 2 || cell !== filler) {
@@ -129,7 +136,7 @@ const game = (function () {
         drawer.drawNameColors(player1turn)
     }
 
-    return {playTurn, changeNames, checkWinnerSign, clearBoard}
+    return {playTurn, changeNames, checkWinnerSign, clearBoard, clearScores}
 })()
 
 
@@ -159,6 +166,7 @@ const manager = (function (){
     let restartButton = document.querySelector("#restart")
     restartButton.addEventListener("click", () => {
         game.clearBoard()
+        game.clearScores()
     })
 
     return {}
